@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhes do Mangá</title>
+  <title>Manga & Manhwa</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
-    /* Adicione seus estilos aqui */
+    /* Estilos básicos */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -14,99 +14,130 @@
       background-color: #f4f4f4;
     }
 
-    header, footer {
+    header {
       background-color: #333;
       color: white;
       text-align: center;
       padding: 20px 0;
     }
 
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
     main {
       padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    #manga-details {
+    .manga-item {
       border: 1px solid #ccc;
       background-color: #fff;
-      margin: 10px auto;
+      margin: 10px;
       padding: 10px;
       border-radius: 5px;
-      width: 300px;
+      width: 200px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    #manga-details img {
-      max-width: 100%;
+    .manga-item img {
+      max-width: 50%;
       height: auto;
       border-radius: 5px;
       margin-bottom: 10px;
     }
 
-    #manga-details h3 {
+    .manga-item h3 {
       margin-top: 0;
-      font-size: 24px;
+      margin-bottom: 5px;
+      font-size: 18px;
     }
 
-    #manga-details p {
-      font-size: 16px;
+    .manga-item p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .read-link {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-top: auto;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Detalhes do Mangá</h1>
+    <h1>Manga & Manhwa</h1>
   </header>
-  <main>
-    <div id="manga-details">
-      <!-- Os detalhes do mangá serão inseridos aqui -->
-    </div>
+  <main id="manga-list">
+    <!-- Lista de Mangás & Manhwas será gerada aqui -->
   </main>
   <footer>
-    <p>© 2024 Manga & Manhwa</p>
+    <p>&copy; 2024 Manga & Manhwa</p>
   </footer>
   <script>
-    // Função para obter o parâmetro 'title' da URL
-    function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-
-    // Função para exibir os detalhes do mangá
-    function displayMangaDetails(title) {
-      // Aqui você buscaria os detalhes do mangá usando o título
-      // Por exemplo, você pode ter uma função que retorna os detalhes com base no título
-      const mangaDetails = getMangaDetailsByTitle(title);
-      
-      // Insira os detalhes do mangá na página
-      const detailsContainer = document.getElementById('manga-details');
-      detailsContainer.innerHTML = `
-        <img src="${mangaDetails.image}" alt="${title}">
-        <h3>${title}</h3>
-        <p>Autor: ${mangaDetails.author}</p>
-        <p>Capítulos: ${mangaDetails.chapters.join(', ')}</p>
-      `;
-    }
-
-    // Função para simular a busca dos detalhes do mangá
-    function getMangaDetailsByTitle(title) {
-      // Esta é uma simulação, substitua pela sua lógica de busca real
+    document.addEventListener('DOMContentLoaded', function() {
+      // Lista de mangás/manhwas (exemplo)
       const mangas = [
         { title: 'Naruto', author: 'Masashi Kishimoto', image: 'https://upload.wikimedia.org/wikipedia/pt/d/d2/Naruto_vol._01.jpg', chapters: ['Capítulo 1', 'Capítulo 2', 'Capítulo 3'] },
         { title: 'One Piece', author: 'Eiichiro Oda', image: 'one_piece.jpg', chapters: ['Capítulo 1', 'Capítulo 2'] },
         { title: 'Solo Leveling', author: 'Chugong', image: 'solo_leveling.jpg', chapters: ['Capítulo 1', 'Capítulo 2', 'Capítulo 3', 'Capítulo 4'] }
+        // Adicione mais mangás/manhwas conforme necessário
       ];
 
-      return mangas.find(manga => manga.title === title);
-    }
+      const mangaList = document.getElementById('manga-list');
 
-    // Quando o conteúdo for carregado
-    document.addEventListener('DOMContentLoaded', function() {
-      const title = getQueryParam('title');
-      if (title) {
-        displayMangaDetails(decodeURIComponent(title));
-      }
+      // Adiciona cada manga da lista ao HTML
+      mangas.forEach(manga => {
+        const mangaItem = document.createElement('div');
+        mangaItem.classList.add('manga-item');
+
+        const image = document.createElement('img');
+        image.src = manga.image;
+        image.alt = manga.title;
+        mangaItem.appendChild(image);
+
+        const title = document.createElement('h3');
+        title.textContent = manga.title;
+        mangaItem.appendChild(title);
+
+        const author = document.createElement('p');
+        author.textContent = 'Autor: ' + manga.author;
+        mangaItem.appendChild(author);
+
+        const chapters = document.createElement('p');
+        chapters.textContent = 'Capítulos: ' + manga.chapters.join(', ');
+        mangaItem.appendChild(chapters);
+
+        const readLink = document.createElement('a');
+        readLink.classList.add('read-link');
+        readLink.href = 'details.html?title=' + encodeURIComponent(manga.title);
+        readLink.innerHTML = '<i class="fas fa-book-open"></i> Ler';
+        mangaItem.appendChild(readLink);
+
+        mangaList.appendChild(mangaItem);
+      });
     });
   </script>
 </body>
-    </html>
-    
+</html>
